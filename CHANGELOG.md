@@ -1,3 +1,7 @@
+### 0.1.0 (July 2, 2015)
+
+* Fork from HTML5 Boilerplate
+
 ### 5.2.0 (May 1, 2015)
 
 * Update jQuery to `v1.11.3`
