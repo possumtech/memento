@@ -22,7 +22,9 @@
         <!-- Add your site or application content here -->
         <div id="fb-root">
 
+            <form name="memento_form" id="memento_form" ></form>
 
+            <input type="button" name="memento_scrub" value="Scrub Post History" />
 
         </div>
 
