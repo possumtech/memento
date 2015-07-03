@@ -40,7 +40,7 @@ function onLogin(response) {
 				}
 
 				var checkbox_markup = '<input type="checkbox" '
-					+ 'id="%s" name="%s" value="%s" />%s<br />';
+					+ 'id="%s" class="%s" name="%s" value="%s" />%s<br />';
 				var checkbox_regex  = /(%s)/g;
 
 				if( pages[page].admin ) {
@@ -54,14 +54,13 @@ function onLogin(response) {
 							switch( checkbox_i ) {
 								case 1: return 'memento_page_' + page;
 								case 2: return 'memento_page';
-								case 3: return page;
-								case 4: return pages[page].name;
+								case 3: return 'memento_page';
+								case 4: return page;
+								case 5: return pages[page].name;
 							}
 
 						}
 					);
-
-					console.log( checkbox );
 
 					$( '#memento_form' ).append( checkbox );
 
@@ -69,9 +68,34 @@ function onLogin(response) {
 
 			}
 
-			console.dir( pages );
+			$( '#memento_scrub' ).click( function() { do_scrub( pages ); } );
 
 		});
 
 	}
+}
+
+function do_scrub( pages ) {
+
+	$( '.memento_page' ).each( function() {
+
+		pages[this.value].scrub = this.checked;
+
+		if( this.checked ) {
+
+			var offset = 0;
+			var limit = 100;
+
+			var query = pages[this.value].id + '/feed?limit=' + limit + '&offset=' + offset;
+
+			FB.api( query, function( response ) {
+
+				console.dir( response );
+
+			});
+
+		}
+
+	});
+
 }
