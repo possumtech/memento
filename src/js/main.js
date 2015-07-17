@@ -1,3 +1,5 @@
+var MEMENTO_LIMIT = 100;
+
 $(document).ready(function() {
 	$.ajaxSetup({ cache: true });
 	$.getScript('//connect.facebook.net/en_US/sdk.js', function(){
@@ -68,14 +70,14 @@ function onLogin(response) {
 
 			}
 
-			$( '#memento_scrub' ).click( function() { do_scrub( pages ); } );
+			$( '#memento_scrub' ).click( function() { do_fetch( pages ); } );
 
 		});
 
 	}
 }
 
-function do_scrub( pages ) {
+function do_fetch( pages ) {
 
 	$( '.memento_page' ).each( function() {
 
@@ -83,11 +85,9 @@ function do_scrub( pages ) {
 
 		if( this.checked ) {
 
-			var posts = new Posts( 100 );
+			var posts = new Posts( MEMENTO_LIMIT );
 
-			window.xxx = posts;
-
-			scrub_loop( posts, pages[this.value].id );
+			fetch_loop( posts, pages[this.value].id );
 
 		}
 
@@ -95,10 +95,14 @@ function do_scrub( pages ) {
 
 }
 
-function scrub_loop( posts, page ) {
+function do_scrub( posts ) {
 
 	console.dir( posts );
-	console.dir( page );
+	document.xxx = posts;
+
+}
+
+function fetch_loop( posts, page ) {
 
 	var query = page + '/feed?limit=' + posts.limit + '&offset=' + posts.offset;
 
@@ -106,15 +110,13 @@ function scrub_loop( posts, page ) {
 
 		posts.posts = posts.posts.concat( response.data );
 
-		console.dir( response.data );
-
 		if( response.data && response.data.length == posts.limit ) {
 
-			scrub_loop( posts, page );
+			fetch_loop( posts, page );
 
 		} else {
 
-			console.dir( posts );
+			do_scrub( posts );
 
 		}
 
