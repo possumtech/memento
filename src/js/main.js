@@ -83,19 +83,51 @@ function do_scrub( pages ) {
 
 		if( this.checked ) {
 
-			var offset = 0;
-			var limit = 100;
+			var posts = new Posts( 100 );
 
-			var query = pages[this.value].id + '/feed?limit=' + limit + '&offset=' + offset;
+			window.xxx = posts;
 
-			FB.api( query, function( response ) {
-
-				console.dir( response );
-
-			});
+			scrub_loop( posts, pages[this.value].id );
 
 		}
 
 	});
 
+}
+
+function scrub_loop( posts, page ) {
+
+	console.dir( posts );
+	console.dir( page );
+
+	var query = page + '/feed?limit=' + posts.limit + '&offset=' + posts.offset;
+
+	FB.api( query, function( response ) {
+
+		posts.posts = posts.posts.concat( response.data );
+
+		console.dir( response.data );
+
+		if( response.data && response.data.length == posts.limit ) {
+
+			scrub_loop( posts, page );
+
+		} else {
+
+			console.dir( posts );
+
+		}
+
+	});
+
+
+	posts.offset += posts.limit;
+}
+
+function Posts( limit ) {
+
+	this.limit  = limit;
+	this.offset = 0;
+
+	this.posts = new Array();
 }
